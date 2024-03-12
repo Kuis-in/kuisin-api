@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Kuisin.FunctionApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7291",
+      "launchBrowser": false
+    }
+  }
+}
