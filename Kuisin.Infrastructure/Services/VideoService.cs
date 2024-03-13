@@ -5,6 +5,7 @@ using Kuisin.Core.Interfaces;
 using Kuisin.Core.Models;
 using Kuisin.Infrastructure.Constants;
 using Microsoft.Extensions.Configuration;
+using System.Xml;
 
 namespace Kuisin.Infrastructure.Services
 {
@@ -47,7 +48,8 @@ namespace Kuisin.Infrastructure.Services
                 Description = ytv.Snippet.Description,
                 ThumbnailUrl = ytv.Snippet.Thumbnails.Maxres?.Url ?? ytv.Snippet.Thumbnails.High?.Url ?? ytv.Snippet.Thumbnails.Default__.Url,
                 VideoUrl = GetYoutubeVideoUrl(videoId),
-                Source = VideoSource.YouTube
+                Source = VideoSource.YouTube,
+                DurationSeconds = Convert.ToUInt32(XmlConvert.ToTimeSpan(ytv.ContentDetails.Duration).TotalSeconds)
             };
         }
 

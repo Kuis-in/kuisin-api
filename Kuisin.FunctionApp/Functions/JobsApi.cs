@@ -28,9 +28,16 @@ namespace Kuisin.FunctionApp.Functions
         [Function(nameof(ScheduleJob))]
         public async Task<IActionResult> ScheduleJob([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "jobs")] [FromBody] CreateQuizRequest payload)
         {
-            var job = await _jobService.ScheduleJobAsync(payload);
-            if (job == null) return new NotFoundResult();
-            return new OkObjectResult(job);
+            try
+            {
+                var job = await _jobService.ScheduleJobAsync(payload);
+                if (job == null) return new NotFoundResult();
+                return new OkObjectResult(job);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return new BadRequestObjectResult(new GeneralResponse(ex.Message));
+            }
         }
 
         [Function(nameof(GetCurrentUserJobs))]

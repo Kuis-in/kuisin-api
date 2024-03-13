@@ -23,5 +23,8 @@ namespace Kuisin.Core.Models
         [JsonPropertyName("source")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public required VideoSource Source { get; set; }
+
+        [JsonPropertyName("durationSeconds")]
+        public uint DurationSeconds { get; set; }
     }
 }

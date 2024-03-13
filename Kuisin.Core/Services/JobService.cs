@@ -37,6 +37,11 @@ namespace Kuisin.Core.Services
             var video = await _videoService.GetYoutubeVideoMetadataAsync(payload.VideoId);
             if (video == null) return null;
 
+            if (video.DurationSeconds > 1800)
+            {
+                throw new InvalidOperationException("Durasi video tidak boleh lebih dari 30 menit");
+            }
+
             var job = _mapper.MapCreateJobRequestToJob(payload);
             job.UserId = currentUserId;
             job.VideoTitle = video.Title;
