@@ -54,6 +54,15 @@ namespace Kuisin.FunctionApp.Functions
             return new OkObjectResult(job);
         }
 
+        [Function(nameof(RetryJob))]
+        public async Task<IActionResult> RetryJob([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "jobs/{jobId}/retry")] [FromBody] Job job, 
+            string jobId, [DurableClient] DurableTaskClient durableClient)
+        {
+            _logger.LogInformation("Incoming job with id '{jobId}'. Job orchestration scheduled.", job.Id);
+            await durableClient.ScheduleNewOrchestrationInstanceAsync(nameof(VideoToQuizOrchestration), job, new StartOrchestrationOptions { InstanceId = job.Id });
+            return new NoContentResult();
+        }
+
         [Function(nameof(HandleJobUpserted))]
         [SignalROutput(HubName = SignalR.JobLiveStatusHubName)]
         public async Task<List<object>> HandleJobUpserted([CosmosDBTrigger(
